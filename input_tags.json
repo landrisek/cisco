@@ -1,0 +1,123 @@
+{
+  "name": "animals",
+  "children": [
+      {
+          "name": "mammals",
+          "children": [
+              {
+                  "name": "dogs",
+                  "children": [
+                      {
+                          "name": "labrador",
+                          "children": []
+                      },
+                      {
+                          "name": "poodle",
+                          "children": []
+                      },
+                      {
+                          "name": "bulldog",
+                          "children": []
+                      },
+                      {
+                        "name": "german shepherd",
+                        "children": []
+                      },
+                      {
+                        "name": "retriever",
+                        "children": []
+                      },
+                      {
+                        "name": "bulldog",
+                        "children": []
+                      },
+                    {
+                        "name": "beagle",
+                        "children": []
+                    },
+                    {
+                        "name": "boxer",
+                        "children": []
+                    },
+                    {
+                        "name": "rottweiler",
+                        "children": []
+                    },
+                    {
+                        "name": "dachshund",
+                        "children": []
+                    },
+                    {
+                        "name": "shih tzu",
+                        "children": []
+                    },
+                    {
+                        "name": "siberian husky",
+                        "children": []
+                    },
+                    {
+                        "name": "doberman pinscher",
+                        "children": []
+                    }
+                  ]
+              },
+              {
+                  "name": "cats",
+                  "children": [
+                      {
+                          "name": "siamese",
+                          "children": []
+                      },
+                      {
+                          "name": "persian",
+                          "children": []
+                      },
+                      {
+                          "name": "sphynx",
+                          "children": []
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "birds",
+          "children": [
+              {
+                  "name": "parrots",
+                  "children": [
+                      {
+                          "name": "macaw",
+                          "children": []
+                      },
+                      {
+                          "name": "cockatiel",
+                          "children": []
+                      },
+                      {
+                          "name": "budgerigar",
+                          "children": []
+                      }
+                  ]
+              },
+              {
+                  "name": "owls",
+                  "children": [
+                      {
+                          "name": "barn owl",
+                          "children": []
+                      },
+                      {
+                          "name": "great horned owl",
+                          "children": []
+                      },
+                      {
+                          "name": "snowy owl",
+                          "children": []
+                      }
+                  ]
+              }
+          ]
+      }
+  ]
+}
