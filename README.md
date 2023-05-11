@@ -46,6 +46,8 @@ For example, given the graph:
 The function will print the result as ["A", "B", "E", "F", "C", "G", "H", "I", "D", "J"].
 The preorder traversal method is used, but the implementation can be easily modified for postorder or inorder traversal.
 To test with a different graph, you can alter the input_graph.json file (while maintaining acyclic graph rules), and the function will generate a new result based on the modified graph.
+
+### How to run
 You can run the functionality by:
 1. executing the command "make walk-graph" in the terminal
 2. if you did make changes in code which you like to test, building the code with "make build" and running ./<your_operation_system>-app -walk-graph
@@ -78,6 +80,8 @@ You can run the test by executing the command "make test-walk-graph" in the term
 
 ### Implementation
 Input data are taken from input_graph.json. 
+
+### How to run
 You can run the functionality by:
 1. executing the command "make walk-graph" in the terminal
 2. if you did make changes in code which you like to test, building the code with "make build" and running ./<your_operation_system>-app -walk-graph
@@ -87,7 +91,7 @@ You can run the functionality by:
 Resutls of tests are also generating documentation in Paths-docs.html in root folder. Similary to previous tasks, is covered main scenarios with empty node, one node and multiple nodes.
 You can run the test by executing the command "make test-paths" in the terminal or by ./<your_operation_system>-app -test-paths if you do not have GNU Make install and you do not want to allow it to install go on your machine.
 
-# Task three
+# Task three: Rest API Server
 
 ### Pseudo code
 1. RestAPI starts an HTTP server that exposes a REST API for interacting with the given node in the graph.
@@ -114,6 +118,13 @@ The function creates a channel to receive the result, initializes an active coun
 Inside the lookupChildrens function, which is called recursively, the node and its children are examined to find a match with the tag. If a match is found, the corresponding node is sent to the result channel. If the context or inner context is canceled, the function exits gracefully. In the case of parallel processing, goroutines are spawned to process each child node.
 The GetSubTags function waits for the result by listening to various channels, including the context from the server, the inner context for processing nodes, the result channel, and the done channel. Depending on the scenario, it returns the appropriate result or an empty MyNode struct to indicate no match was found.
 By placing this functionality in the repository package, it follows a logical grouping of operations related to finding and retrieving data from the underlying data structures. It promotes code organization and separation of concerns, making the codebase more maintainable and understandable.
+
+### How to run
+Exposed on http://localhost:8080/taggedContent?tag=animals&token=YYY
+You can start server by:
+1. executing the command "make rest-api" in the terminal
+2. if you did make changes in code which you like to test, building the code with "make build" and running ./<your_operation_system>-app -rest-api
+3. directly executing the pre-built solution running ./<your_operation_system>-app -rest-api
 
 ### Testing
 We are covering main test cases like not providing tag or token, or provided one or both of them invalid. Return of main http statuses

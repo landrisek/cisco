@@ -13,6 +13,7 @@ func main() {
 	walkGraph := flag.Bool("walk-graph", false, "Walk the graph")
 	pathsGraph := flag.Bool("paths", false, "Find all paths in graph")
 	restAPI := flag.Bool("rest-api", false, "Run server with rest API for tags")
+	countWords := flag.Bool("count-words", false, "Count words in input file")
 
 	// Parse command line flags
 	flag.Parse()
@@ -65,5 +66,11 @@ func main() {
 		tags, err := controller.UploadJson("input_tags.json")
 		controller.Log(err, "Error uploading JSON")
 		controller.RestAPI(tags)
+	}
+
+	// Handle "paths" flag
+	if *countWords {
+		err := controller.CountWords("input_words.txt")
+		controller.Log(err, "Error on counting words")
 	}
 }

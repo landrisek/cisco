@@ -113,8 +113,7 @@ func GetSubTags(ctx context.Context, node GNode, tag string) MyNode {
 // It sends matching nodes to the result channel and tracks the number of active goroutines using the active counter.
 // The ctx context is used for cancellation and termination.
 // Once all goroutines have completed, a signal is sent to the done channel.
-
-// HINT: only channels for writing as parameters, not draining
+// HINT: only channels for writing as input parameters, method is not draining them.
 func lookupChildrens(ctx context.Context, innerCtx context.Context, node GNode, tag string, result chan<- MyNode, done chan<- struct{}, active *int32) {
 	defer func() {
 		if atomic.AddInt32(active, -1) == 0 {

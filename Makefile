@@ -6,10 +6,14 @@ help:
 	@echo "make walk-graph                  Take a structure of graph in input_graph.json, collect all nodes and prints their name in terminal"
 	@echo "make test-walk-graph             Run test suite for walk graph functionality"
 	@echo "make paths                       Take a structure of graph in input_graph.json and return all possible path until bottom is reached"
-	@echo "make test-path                   Run test suite for paths functionality"
+	@echo "make test-paths                  Run test suite for paths functionality"
+	@echo "make rest-api                    Run rest api providing content of given tag"
+	@echo "make test-rest-api               Run test suite for rest api functionality"
+	@echo "make count-words                 Count words for content of input_words.txt file placed in root"
+	@echo "make test-count-words               Run test suite for counting words functionality"
 
 r:
-	./scripts/install-go.sh && ./scripts/test-rest-api.sh
+	./scripts/install-go.sh && ./scripts/count-words.sh
 
 build:
 	./scripts/install-go.sh && ./scripts/build.sh
@@ -31,3 +35,9 @@ rest-api:
 
 test-rest-api:
 	./scripts/install-go.sh && ./scripts/test-rest-api.sh
+
+count-words:
+	./scripts/install-go.sh && ./scripts/count-words.sh
+
+test-count-words:
+	./scripts/install-go.sh && ./scripts/test-count-words.sh
