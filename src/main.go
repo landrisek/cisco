@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"time"
 
 	"github.com/landrisek/cisco/src/controller"
 )
@@ -21,7 +22,7 @@ func main() {
 		// Call UploadJson function to read the input JSON and create the graph
 		graph, err := controller.UploadJson("input_graph.json")
 		controller.Log(err, "Error uploading JSON")
-		
+
 		// Call WalkGraph function to traverse the graph and get all nodes
 		nodes := controller.WalkGraph(graph)
 
@@ -36,7 +37,7 @@ func main() {
 		// Call UploadJson function to read the input JSON and create the graph
 		graph, err := controller.UploadJson("input_graph.json")
 		controller.Log(err, "Error uploading JSON")
-	
+
 		// Call WalkGraph function to traverse the graph and get all paths
 		paths := controller.Paths(graph)
 		// Print the paths in the desired format
@@ -56,6 +57,11 @@ func main() {
 
 	// Handle "paths" flag
 	if *restAPI {
+		defer func() {
+			fmt.Printf("container died on %v"+"\n", time.Now())
+		}()
+		fmt.Printf("container started on %v"+"\n", time.Now())
+		// Call UploadJson function to read the input JSON and create the graph
 		tags, err := controller.UploadJson("input_tags.json")
 		controller.Log(err, "Error uploading JSON")
 		controller.RestAPI(tags)

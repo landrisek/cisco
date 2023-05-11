@@ -2,10 +2,10 @@ package controller
 
 import (
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"net/url"
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -21,11 +21,13 @@ type testCase struct {
 	expectedPaths   [][]string
 }
 
-/*		   A
-	/      |    \
-   B       C     D
-  / \     /|\    | 
-  E  F   G H I   J */
+/*
+			   A
+		/      |    \
+	   B       C     D
+	  / \     /|\    |
+	  E  F   G H I   J
+*/
 func testWalkGraph(t *testing.T, testCases []testCase) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -98,8 +100,8 @@ func TestWalkGraph(t *testing.T) {
 							repository.NewNode().SetName("C"),
 						}),
 					repository.NewNode().SetName("F"),
-			}),
-			expectedLength: 5,
+				}),
+			expectedLength:  5,
 			expectedContent: []string{"H", "E", "B", "C", "F"},
 		},
 		generateRandomTestCase(10),
@@ -148,14 +150,14 @@ func generateRandomTestCase(maxNodes int) testCase {
 func TestPaths(t *testing.T) {
 	testCases := []testCase{
 		{
-			name: "Test with no node",
-			input: nil,
+			name:           "Test with no node",
+			input:          nil,
 			expectedLength: 0,
-			expectedPaths: [][]string{},
+			expectedPaths:  [][]string{},
 		},
 		{
-			name: "Test with one node",
-			input: repository.NewNode().SetName("A"),
+			name:           "Test with one node",
+			input:          repository.NewNode().SetName("A"),
 			expectedLength: 1,
 			expectedPaths: [][]string{
 				{"A"},
@@ -209,7 +211,7 @@ func TestPaths(t *testing.T) {
 	generateHTMLDoc(testCases, "Paths")
 }
 
-func generateHTMLDoc(testCases []testCase, name string) {	
+func generateHTMLDoc(testCases []testCase, name string) {
 	// Create a new HTML file
 	file, err := os.Create("../../" + url.QueryEscape(name) + "-doc.html")
 	if err != nil {
@@ -219,7 +221,7 @@ func generateHTMLDoc(testCases []testCase, name string) {
 	defer file.Close()
 	// Write the HTML header and body tags
 	fmt.Fprintln(file, "<html>")
-	fmt.Fprintln(file, "<head><title>Documentation of " + name + " function</title></head>")
+	fmt.Fprintln(file, "<head><title>Documentation of "+name+" function</title></head>")
 	fmt.Fprintln(file, "<body>")
 
 	// Iterate through all test cases and write the input and expected output to the HTML file
@@ -268,85 +270,84 @@ func writeNodeToHTML(w *os.File, node repository.GNode) {
 
 func TestRestAPI(t *testing.T) {
 	// dereferencing for server structure
-    node := *repository.NewNode().SetName("root").SetChildren([]repository.GNode{
-        *repository.NewNode().SetName("child1").SetChildren([]repository.GNode{
-            *repository.NewNode().SetName("grandchild1"),
-            *repository.NewNode().SetName("grandchild2"),
-        }),
-        *repository.NewNode().SetName("child2").SetChildren([]repository.GNode{
-            *repository.NewNode().SetName("grandchild3"),
-        }),
-    })
+	node := *repository.NewNode().SetName("root").SetChildren([]repository.GNode{
+		*repository.NewNode().SetName("child1").SetChildren([]repository.GNode{
+			*repository.NewNode().SetName("grandchild1"),
+			*repository.NewNode().SetName("grandchild2"),
+		}),
+		*repository.NewNode().SetName("child2").SetChildren([]repository.GNode{
+			*repository.NewNode().SetName("grandchild3"),
+		}),
+	})
 
-    go RestAPI(node)
+	go RestAPI(node)
 
-    time.Sleep(100 * time.Millisecond) // wait for server to start
-	
+	time.Sleep(100 * time.Millisecond) // wait for server to start
+
 	token := repository.GetValidToken()
 
-    tests := []struct {
-        name           string
-        url            string
-        token          string
-        expectedStatus int
-        expectedBody   string
-    }{
-        {
-            name:           "missing tag parameter",
-            url:            "http://localhost:8080/taggedContent?token=" + token,
-            expectedStatus: http.StatusBadRequest,
-            expectedBody:   "Missing 'tag' parameter\n",
-        },
-        {
-            name:           "unauthorized request",
-            url:            "http://localhost:8080/taggedContent?tag=child1&token=invalid",
-            expectedStatus: http.StatusUnauthorized,
-            expectedBody:   "Unauthorized\n",
-        },
-        {
-            name:           "not found",
-            url:            "http://localhost:8080/taggedContent?tag=unknown&token=" + token,
-            expectedStatus: http.StatusBadRequest,
-            expectedBody:   "Tag unknown was not found\n",
-        },
-        {
-            name:           "success",
-            url:            "http://localhost:8080/taggedContent?tag=child1&token=" + token,
-            expectedStatus: http.StatusOK,
-            expectedBody:   `{"name":"child1","children":[{"name":"grandchild1","children":null},{"name":"grandchild2","children":null}]}`,
-        },
-    }
+	tests := []struct {
+		name           string
+		url            string
+		token          string
+		expectedStatus int
+		expectedBody   string
+	}{
+		{
+			name:           "missing tag parameter",
+			url:            "http://localhost:8080/taggedContent?token=" + token,
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "Missing 'tag' parameter\n",
+		},
+		{
+			name:           "unauthorized request",
+			url:            "http://localhost:8080/taggedContent?tag=child1&token=invalid",
+			expectedStatus: http.StatusUnauthorized,
+			expectedBody:   "Unauthorized\n",
+		},
+		{
+			name:           "not found",
+			url:            "http://localhost:8080/taggedContent?tag=unknown&token=" + token,
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "Tag unknown was not found\n",
+		},
+		{
+			name:           "success",
+			url:            "http://localhost:8080/taggedContent?tag=child1&token=" + token,
+			expectedStatus: http.StatusOK,
+			expectedBody:   `{"name":"child1","children":[{"name":"grandchild1","children":null},{"name":"grandchild2","children":null}]}`,
+		},
+	}
 
-    for _, tc := range tests {
-        t.Run(tc.name, func(t *testing.T) {
-            req, err := http.NewRequest("GET", tc.url + "", nil)
-            if err != nil {
-                t.Fatal(err)
-            }
-            req.Header.Set("token", tc.token)
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			req, err := http.NewRequest("GET", tc.url+"", nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			req.Header.Set("token", tc.token)
 
-            resp, err := http.DefaultClient.Do(req)
-            if err != nil {
-                t.Fatal(err)
-            }
-            defer resp.Body.Close()
+			resp, err := http.DefaultClient.Do(req)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer resp.Body.Close()
 
-            if resp.StatusCode != tc.expectedStatus {
-                t.Errorf("Expected status %d, but got %d", tc.expectedStatus, resp.StatusCode)
-            }
+			if resp.StatusCode != tc.expectedStatus {
+				t.Errorf("Expected status %d, but got %d", tc.expectedStatus, resp.StatusCode)
+			}
 
-            body, err := ioutil.ReadAll(resp.Body)
-            if err != nil {
-                t.Fatal(err)
-            }
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-            if string(body) != tc.expectedBody {
-                t.Errorf("Expected response body %q, but got %q", tc.expectedBody, string(body))
-            }
-        })
-    }
+			if string(body) != tc.expectedBody {
+				t.Errorf("Expected response body %q, but got %q", tc.expectedBody, string(body))
+			}
+		})
+	}
 
-    // Wait for server to shut down
-    time.Sleep(100 * time.Millisecond)
+	// Wait for server to shut down
+	time.Sleep(100 * time.Millisecond)
 }
-

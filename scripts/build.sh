@@ -7,6 +7,6 @@ export GO111MODULE="on"
 export GOPATH="$HOME/go"
 
 # Build for all supported platforms
-GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/cisco-app ./src
-GOOS=linux GOARCH=amd64 go build -o bin/darwin/amd64/cisco-app ./src
-GOOS=windows GOARCH=amd64 go build -o bin/darwin/amd64/cisco-app ./src
+GOOS=darwin GOARCH=amd64 go build -o darwin-app ./src
+GOOS=linux GOARCH=amd64 go build -o linux-app ./src
+GOOS=windows GOARCH=amd64 go build -o windows-app ./src
