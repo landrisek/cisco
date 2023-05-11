@@ -1,0 +1,29 @@
+<html>
+<head><title>Documentation of WalkGraph function</title></head>
+<body>
+<h2>Test acyclic graph with no node</h2><p><b>Input:</b></p>
+<p><b>Expected output:</b> 0 elements</p><ul>
+</ul>
+<hr>
+<h2>Test acyclic graph with one empty node</h2><p><b>Input:</b></p>
+<li></li><p><b>Expected output:</b> 1 elements</p><ul>
+<li></li></ul>
+<hr>
+<h2>Test acyclic graph with one node with values</h2><p><b>Input:</b></p>
+<li>A</li><p><b>Expected output:</b> 1 elements</p><ul>
+<li>A</li></ul>
+<hr>
+<h2>Test acyclic graph with more nodes</h2><p><b>Input:</b></p>
+<li>A<ul><li>B<ul><li>E</li><li>F</li></ul></li><li>C<ul><li>G</li><li>H</li><li>I</li></ul></li><li>D<ul><li>J</li></ul></li></ul></li><p><b>Expected output:</b> 10 elements</p><ul>
+<li>A</li><li>B</li><li>E</li><li>F</li><li>C</li><li>G</li><li>H</li><li>I</li><li>D</li><li>J</li></ul>
+<hr>
+<h2>Test disconnected graph</h2><p><b>Input:</b></p>
+<li>H<ul><li>E<ul><li>B</li><li>C</li></ul></li><li>F</li></ul></li><p><b>Expected output:</b> 5 elements</p><ul>
+<li>H</li><li>E</li><li>B</li><li>C</li><li>F</li></ul>
+<hr>
+<h2>Random acyclic graph with 10 nodes</h2><p><b>Input:</b></p>
+<li>A<ul><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li></ul></li><p><b>Expected output:</b> 10 elements</p><ul>
+<li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li><li>H</li><li>I</li><li>J</li></ul>
+<hr>
+</body>
+</html>

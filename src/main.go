@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"time"
 
 	"github.com/landrisek/cisco/src/controller"
 )
@@ -19,7 +18,12 @@ func main() {
 
 	// Handle "walk-graph" flag
 	if *walkGraph {
-		nodes := controller.WalkGraph()
+		// Call UploadJson function to read the input JSON and create the graph
+		graph, err := controller.UploadJson("input_graph.json")
+		controller.Log(err, "Error uploading JSON")
+		
+		// Call WalkGraph function to traverse the graph and get all nodes
+		nodes := controller.WalkGraph(graph)
 
 		// Print all nodes
 		for _, node := range nodes {
@@ -29,19 +33,24 @@ func main() {
 
 	// Handle "paths" flag
 	if *pathsGraph {
+		// Call UploadJson function to read the input JSON and create the graph
+		graph, err := controller.UploadJson("input_graph.json")
+		controller.Log(err, "Error uploading JSON")
 
 		// Call WalkGraph function to traverse the graph and get all paths
-		paths := controller.Paths()
+		paths := controller.Paths(graph)
 
 		for _, path := range paths {
-			for i, node := range path {
-				fmt.Prinln(node.GetName())
+			for _, node := range path {
+				fmt.Println(node.GetName())
 			}
 		}
 	}
 
 	// Handle "paths" flag
 	if *restAPI {
-		controller.RestAPI()
+		tags, err := controller.UploadJson("input_tags.json")
+		controller.Log(err, "Error uploading JSON")
+		controller.RestAPI(tags)
 	}
 }
