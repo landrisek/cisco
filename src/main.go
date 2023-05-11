@@ -36,15 +36,22 @@ func main() {
 		// Call UploadJson function to read the input JSON and create the graph
 		graph, err := controller.UploadJson("input_graph.json")
 		controller.Log(err, "Error uploading JSON")
-
+	
 		// Call WalkGraph function to traverse the graph and get all paths
 		paths := controller.Paths(graph)
-
+		// Print the paths in the desired format
+		fmt.Print("paths(A) = (")
 		for _, path := range paths {
-			for _, node := range path {
-				fmt.Println(node.GetName())
+			fmt.Print(" (")
+			for i, node := range path {
+				fmt.Print(node.GetName())
+				if i != len(path)-1 {
+					fmt.Print(" ")
+				}
 			}
+			fmt.Print(")")
 		}
+		fmt.Print(" )")
 	}
 
 	// Handle "paths" flag

@@ -1,0 +1,17 @@
+<html>
+<head><title>Documentation of Paths function</title></head>
+<body>
+<h2>Test with no node</h2><p><b>Input:</b></p>
+<p><b>Expected output:</b> 0 elements</p><ul>
+</ul>
+<hr>
+<h2>Test with one node</h2><p><b>Input:</b></p>
+<li>A</li><p><b>Expected output:</b> 1 elements</p><ul>
+<li>[A]</li></ul>
+<hr>
+<h2>Test with multiple nodes</h2><p><b>Input:</b></p>
+<li>A<ul><li>B<ul><li>E</li><li>F</li></ul></li><li>C<ul><li>G</li><li>H</li><li>I</li></ul></li><li>D<ul><li>J</li></ul></li></ul></li><p><b>Expected output:</b> 6 elements</p><ul>
+<li>[A B E]</li><li>[A B F]</li><li>[A C G]</li><li>[A C H]</li><li>[A C I]</li><li>[A D J]</li></ul>
+<hr>
+</body>
+</html>

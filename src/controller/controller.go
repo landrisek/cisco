@@ -10,13 +10,11 @@ import (
 )
 
 func UploadJson(filename string) (repository.GNode, error) { 
-	// Read the JSON data from file
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the JSON data into a slice of Nodes
 	var node interface{}
 	err = json.Unmarshal(data, &node)
 	if err != nil {
@@ -76,7 +74,38 @@ func findNode(node repository.GNode, nodes *[]repository.GNode) {
 }
 
 func Paths(node repository.GNode) [][]repository.GNode {
-	return nil
+	// 1. data structrues - create empty slice of slices with GNodes as "paths"
+	var paths [][]repository.GNode
+	// 2. handle nil node
+	if nil == node {
+		return paths
+	}
+	// 3. data structrues - create empty slice of GNodes as "path"
+	var path []repository.GNode
+	// 4. call recursive function with input parameters pointer node, pointer to path and paths
+	findBottom(node, &path, &paths)
+	// 10. return value slice of slices
+	return paths
+	// 11. check for edge cases / reasonability of return values
+}
+
+func findBottom(node repository.GNode, path *[]repository.GNode, paths *[][]repository.GNode) {
+	// 5. we checked if node is not nil, in parent function, so add it to the path by dereferencing appending of slice
+	*path = append(*path, node)
+	childrens := node.GetChildren()
+	// 6. if childrens of node is empty, we reached the bottom
+	if len(childrens) == 0 {
+		// 7. append defefrenced path to derefefernce paths
+		*paths = append(*paths, append([]repository.GNode{}, *path...))
+	} else {
+		// 8. otherwise call recursive function on each child
+		for _, child := range childrens {
+			findBottom(child, path, paths)
+		}
+	}
+	// 9. as path [A,B] was added, but next call will be on C, we need path looks like [A] 
+	// where we add C so it will be [A,C]
+	*path = (*path)[:len(*path)-1]
 }
 
 func RestAPI(node repository.GNode) {
