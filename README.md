@@ -130,3 +130,27 @@ You can start server by:
 We are covering main test cases like not providing tag or token, or provided one or both of them invalid. Return of main http statuses
 like bad request, unauthorize request, not found and success.
 You can run the test by executing the command "make test-rest-api" in the terminal or by ./<your_operation_system>-app -test-rest-api if you do not have GNU Make install and you do not want to allow it to install go on your machine.
+
+# Task four: Word Count Program
+
+### Pseudo code
+1. Read the input text file.
+2. Tokenize / filter out the text into words based on a chosen word definition (try to thing something better than regex)
+3. Create a data structure (e.g., a map or dictionary) to store word counts.
+4. Iterate through each word in the text.
+5. If the word exists in the data structure, increment its count.
+6. If the word does not exist in the data structure, add it with a count of 1.
+7. Sort words decrementaly.
+7. Print the word counts in the format <count> <word>.
+
+### Implementation
+The program will accept a text file as input_word.txt and produce a count of all the different words in the file. Special characters are considered for dividers, e.g this "hello/world" is considered for two words.
+
+### How to run
+You can run by:
+1. executing the command "make count-words" in the terminal
+2. if you did make changes in code which you like to test, building the code with "make build" and running ./<your_operation_system>-app -count-words
+3. directly executing the pre-built solution running ./<your_operation_system>-app -count-words
+
+### Testing
+This is quick and dirty code, so just one quick test with reflect package. You can run the test by executing the command "make test-count-words"
