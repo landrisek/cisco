@@ -83,27 +83,23 @@ func (n *MyNode) MarshalJSON() ([]byte, error) {
 // GetSubTags will return fist occurence of tag.
 // It does not expect tags with duplicite names in data structures.
 func GetSubTags(ctx context.Context, node GNode, tag string) MyNode {
-	// We are looking only for first match.
 	result := make(chan MyNode, 1)
-	// Start with one active goroutine.
 	active := int32(1)
 	done := make(chan struct{})
 	innerCtx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	go lookupChildrens(ctx, innerCtx, node, tag, result, done, &active)
+	pool := NewPool(10)
+	defer pool.Wait()
+	go lookupChildrens(ctx, innerCtx, node, tag, result, done, pool, &active)
 
 	select {
 	case <-ctx.Done():
-		// Context from server was cancelled, exit gracefully.
 		return MyNode{}
 	case <-innerCtx.Done():
-		// Context for processing nodes was cancelled, exit gracefully.
 		return MyNode{}
 	case res := <-result:
-		// Result found, exit gracefully
 		return res
 	case <-done:
-		// All goroutines finished, no tags found, exit gracefully
 		return MyNode{}
 	}
 }
@@ -114,7 +110,7 @@ func GetSubTags(ctx context.Context, node GNode, tag string) MyNode {
 // The ctx context is used for cancellation and termination.
 // Once all goroutines have completed, a signal is sent to the done channel.
 // HINT: only channels for writing as input parameters, method is not draining them.
-func lookupChildrens(ctx context.Context, innerCtx context.Context, node GNode, tag string, result chan<- MyNode, done chan<- struct{}, active *int32) {
+func lookupChildrens(ctx context.Context, innerCtx context.Context, node GNode, tag string, result chan<- MyNode, done chan<- struct{}, pool *Pool, active *int32) {
 	defer func() {
 		if atomic.AddInt32(active, -1) == 0 {
 			done <- struct{}{}
@@ -130,8 +126,6 @@ func lookupChildrens(ctx context.Context, innerCtx context.Context, node GNode, 
 		return
 	}
 
-	// HINT: This is hot spot, we use parallel processing.
-	// This still has some cons which we can discuss like implementing worker pools.
 	if len(node.GetChildren()) >= 10 {
 		for _, child := range node.GetChildren() {
 			select {
@@ -141,21 +135,17 @@ func lookupChildrens(ctx context.Context, innerCtx context.Context, node GNode, 
 				return
 			default:
 				atomic.AddInt32(active, 1)
-				go lookupChildrens(ctx, innerCtx, child, tag, result, done, active)
+				pool.Schedule(func() {
+					lookupChildrens(ctx, innerCtx, child, tag, result, done, pool, active)
+				})
 			}
 		}
 	} else {
-		// HINT: This is not hot spot and as responsible programmers, we know there is some cost for workaround on goroutines
-		// so we do not mind a wait little, when node is small one.
 		for _, child := range node.GetChildren() {
-			// HINT: However we will count each sequential run so we will not end up with done channel drained earlier
-			// than all node will be processed or result will be fined in <-result channel.
 			atomic.AddInt32(active, 1)
-			lookupChildrens(ctx, innerCtx, child, tag, result, done, active)
+			lookupChildrens(ctx, innerCtx, child, tag, result, done, pool, active)
 		}
-
 	}
-
 }
 
 var tokenCache = map[string]bool{
